@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { SITE, SERVICES, CITIES } from '@/lib/constants';
 
@@ -8,9 +9,18 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Company */}
           <div>
-            <div className="text-xl font-extrabold mb-4">
-              <span className="text-white">Crown</span>{' '}
-              <span className="text-crown-red">Roofing</span>
+            <div className="flex items-center gap-3 mb-4">
+              <Image
+                src="/logo.svg"
+                alt="Crown Roofing LLC"
+                width={48}
+                height={55}
+                className="h-12 w-auto"
+              />
+              <span className="text-xl font-extrabold">
+                <span className="text-white">Crown</span>{' '}
+                <span className="text-crown-red">Roofing</span>
+              </span>
             </div>
             <p className="text-sm leading-relaxed mb-4">
               Livingston County&apos;s trusted roofing experts. Licensed, insured, and committed to

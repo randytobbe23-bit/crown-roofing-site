@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SITE, SERVICES, CITIES } from '@/lib/constants';
@@ -33,7 +34,17 @@ export function Header() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-extrabold tracking-tight">
+            <div className="bg-crown-dark rounded-lg p-1.5">
+              <Image
+                src="/logo.svg"
+                alt="Crown Roofing LLC"
+                width={40}
+                height={46}
+                className="h-9 w-auto"
+                priority
+              />
+            </div>
+            <span className="text-xl font-extrabold tracking-tight">
               <span className="text-crown-dark">Crown</span>{' '}
               <span className="text-crown-red">Roofing</span>
             </span>
