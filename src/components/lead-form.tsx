@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 const BOOKING_BASE = 'https://link.crownroofing.pro/widget/booking/srtwSPfQg4joiDWJutjx';
 
@@ -11,20 +11,19 @@ export function LeadForm({ source = 'homepage' }: { source?: string }) {
     email: string;
     phone: string;
   } | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus('loading');
 
-    const form = e.currentTarget;
+    const formData = new FormData(e.currentTarget);
     const data = {
-      name: (form.elements.namedItem('name') as HTMLInputElement).value,
-      email: (form.elements.namedItem('email') as HTMLInputElement).value,
-      phone: (form.elements.namedItem('phone') as HTMLInputElement).value,
-      address: (form.elements.namedItem('address') as HTMLInputElement).value,
-      service: (form.elements.namedItem('service') as HTMLSelectElement).value,
-      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+      name: (formData.get('name') as string) || '',
+      email: (formData.get('email') as string) || '',
+      phone: (formData.get('phone') as string) || '',
+      address: (formData.get('address') as string) || '',
+      service: (formData.get('service') as string) || '',
+      message: (formData.get('message') as string) || '',
       source,
     };
 
@@ -34,11 +33,18 @@ export function LeadForm({ source = 'homepage' }: { source?: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error('Failed');
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        console.error('Lead API error:', errData);
+        throw new Error('Failed');
+      }
+
+      // Save contact info BEFORE changing status
       setContactInfo({ name: data.name, email: data.email, phone: data.phone });
       setStatus('success');
-      form.reset();
-    } catch {
+    } catch (err) {
+      console.error('Form submission error:', err);
       setStatus('error');
     }
   }
@@ -47,9 +53,9 @@ export function LeadForm({ source = 'homepage' }: { source?: string }) {
     // Build booking URL with sticky contact params
     const params = new URLSearchParams();
     if (contactInfo.name) {
-      const [first, ...rest] = contactInfo.name.trim().split(' ');
-      params.set('first_name', first);
-      if (rest.length) params.set('last_name', rest.join(' '));
+      const parts = contactInfo.name.trim().split(' ');
+      params.set('first_name', parts[0]);
+      if (parts.length > 1) params.set('last_name', parts.slice(1).join(' '));
     }
     if (contactInfo.email) params.set('email', contactInfo.email);
     if (contactInfo.phone) params.set('phone', contactInfo.phone);
@@ -57,14 +63,12 @@ export function LeadForm({ source = 'homepage' }: { source?: string }) {
 
     return (
       <div>
-        {/* Success message */}
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center mb-6">
           <div className="text-3xl mb-2">✓</div>
           <h3 className="text-lg font-bold text-green-800 mb-1">Info Received!</h3>
           <p className="text-green-700 text-sm">Now pick a time that works for your free quote below.</p>
         </div>
 
-        {/* Booking calendar embed */}
         <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
           <div className="bg-crown-dark text-white px-4 py-3">
             <h3 className="font-bold text-sm">Schedule Your Free Quote</h3>
@@ -83,7 +87,7 @@ export function LeadForm({ source = 'homepage' }: { source?: string }) {
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input
           name="name"

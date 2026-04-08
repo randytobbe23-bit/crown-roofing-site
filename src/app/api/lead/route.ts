@@ -48,10 +48,10 @@ export async function POST(req: NextRequest) {
 
     const contactId = contactData.contact?.id;
 
-    // Send internal notification via GHL note (visible to all users on the contact)
+    // Fire-and-forget: send internal notifications (don't block the response)
     if (contactId) {
       const noteBody = [
-        `🔔 NEW WEBSITE LEAD`,
+        `NEW WEBSITE LEAD`,
         `Name: ${name}`,
         `Phone: ${phone}`,
         email ? `Email: ${email}` : null,
@@ -63,25 +63,23 @@ export async function POST(req: NextRequest) {
         `Submitted from crownroofing.pro — respond within 5 minutes!`,
       ].filter(Boolean).join('\n');
 
-      // Create note on the contact
-      await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/notes`, {
+      const ghlHeaders = {
+        Authorization: `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+        Version: '2021-07-28',
+      };
+
+      // Create note on the contact (non-blocking)
+      fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/notes`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-          Version: '2021-07-28',
-        },
+        headers: ghlHeaders,
         body: JSON.stringify({ body: noteBody }),
       }).catch((err) => console.error('Note creation failed:', err));
 
-      // Create a task assigned to all users to follow up
-      await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/tasks`, {
+      // Create a follow-up task (non-blocking)
+      fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/tasks`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-          Version: '2021-07-28',
-        },
+        headers: ghlHeaders,
         body: JSON.stringify({
           title: `Follow up with ${name} — Website Lead`,
           body: `New lead from website (${source || 'homepage'}). Service: ${service || 'general'}. Respond within 5 minutes.`,
