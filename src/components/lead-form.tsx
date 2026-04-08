@@ -1,9 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+
+const BOOKING_BASE = 'https://link.crownroofing.pro/widget/booking/srtwSPfQg4joiDWJutjx';
 
 export function LeadForm({ source = 'homepage' }: { source?: string }) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [contactInfo, setContactInfo] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+  } | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,6 +35,7 @@ export function LeadForm({ source = 'homepage' }: { source?: string }) {
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error('Failed');
+      setContactInfo({ name: data.name, email: data.email, phone: data.phone });
       setStatus('success');
       form.reset();
     } catch {
@@ -34,18 +43,47 @@ export function LeadForm({ source = 'homepage' }: { source?: string }) {
     }
   }
 
-  if (status === 'success') {
+  if (status === 'success' && contactInfo) {
+    // Build booking URL with sticky contact params
+    const params = new URLSearchParams();
+    if (contactInfo.name) {
+      const [first, ...rest] = contactInfo.name.trim().split(' ');
+      params.set('first_name', first);
+      if (rest.length) params.set('last_name', rest.join(' '));
+    }
+    if (contactInfo.email) params.set('email', contactInfo.email);
+    if (contactInfo.phone) params.set('phone', contactInfo.phone);
+    const bookingUrl = `${BOOKING_BASE}?${params.toString()}`;
+
     return (
-      <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
-        <div className="text-4xl mb-3">✓</div>
-        <h3 className="text-xl font-bold text-green-800 mb-2">Thank You!</h3>
-        <p className="text-green-700">We&apos;ll contact you within 5 minutes to schedule your free inspection.</p>
+      <div>
+        {/* Success message */}
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center mb-6">
+          <div className="text-3xl mb-2">✓</div>
+          <h3 className="text-lg font-bold text-green-800 mb-1">Info Received!</h3>
+          <p className="text-green-700 text-sm">Now pick a time that works for your free quote below.</p>
+        </div>
+
+        {/* Booking calendar embed */}
+        <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
+          <div className="bg-crown-dark text-white px-4 py-3">
+            <h3 className="font-bold text-sm">Schedule Your Free Quote</h3>
+            <p className="text-xs text-gray-400">Pick a date and time — your info is already filled in.</p>
+          </div>
+          <iframe
+            src={bookingUrl}
+            title="Schedule Free Quote - Crown Roofing"
+            className="w-full border-0"
+            style={{ minHeight: '650px' }}
+            allow="geolocation"
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input
           name="name"
