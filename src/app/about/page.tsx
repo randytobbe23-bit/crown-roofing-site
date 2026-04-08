@@ -31,6 +31,24 @@ export default function AboutPage() {
             we&apos;ve grown into a full-service exterior contractor serving Brighton, Hamburg, Howell, Pinckney,
             and surrounding communities.
           </p>
+
+          {/* CEO Video */}
+          <div className="my-10">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Hear From Our CEO</h3>
+            <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-lg border border-gray-200">
+              <iframe
+                src="https://www.youtube.com/embed/qSktZSiQ0RE"
+                title="Crown Roofing CEO - Our Story"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+            <p className="text-sm text-gray-500 mt-3 text-center">
+              {SITE.owner}, Founder &amp; CEO of Crown Roofing LLC
+            </p>
+          </div>
+
           <p>
             We specialize in residential roofing, roof replacement, gutter installation, and siding — using
             premium materials from trusted manufacturers and backing every job with warranties you can count on.
