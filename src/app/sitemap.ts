@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { SERVICES, CITIES, SITE } from '@/lib/constants';
+import { SERVICES, CITIES, SITE, GUTTER_SERVICES, SIDING_SERVICES } from '@/lib/constants';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE.url;
@@ -16,6 +16,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const service of SERVICES) {
     pages.push({
       url: `${baseUrl}/services/${service.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
+
+  // Gutter sub-service pages
+  for (const service of GUTTER_SERVICES) {
+    pages.push({
+      url: `${baseUrl}/services/gutters/${service.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
+
+  // Siding sub-service pages
+  for (const service of SIDING_SERVICES) {
+    pages.push({
+      url: `${baseUrl}/services/siding/${service.slug}`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.8,

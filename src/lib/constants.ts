@@ -84,6 +84,68 @@ export const CITIES = [
   },
 ];
 
+export const GUTTER_SERVICES = [
+  {
+    slug: 'seamless-gutter-installation',
+    name: 'Seamless Gutter Installation',
+    title: 'Seamless Gutter Installation',
+    description: 'Custom-fabricated seamless aluminum gutters formed on-site for a perfect, leak-free fit. Available in 20+ colors to match your home.',
+    icon: '🏠',
+  },
+  {
+    slug: 'gutter-guards',
+    name: 'Gutter Guards',
+    title: 'Gutter Guard Installation',
+    description: 'Stop cleaning your gutters forever. Our gutter guard systems keep leaves and debris out while letting water flow freely year-round.',
+    icon: '🛡️',
+  },
+  {
+    slug: 'gutter-repair',
+    name: 'Gutter Repair',
+    title: 'Gutter Repair & Maintenance',
+    description: 'Sagging gutters, leaking joints, damaged downspouts — we fix it all. Fast, affordable gutter repairs to protect your home from water damage.',
+    icon: '🔧',
+  },
+  {
+    slug: 'downspout-installation',
+    name: 'Downspout Installation',
+    title: 'Downspout Installation & Extensions',
+    description: 'Proper downspout placement and extensions to direct water away from your foundation. Prevent basement flooding and soil erosion.',
+    icon: '⬇️',
+  },
+];
+
+export const SIDING_SERVICES = [
+  {
+    slug: 'vinyl-siding',
+    name: 'Vinyl Siding',
+    title: 'Vinyl Siding Installation',
+    description: 'Premium vinyl siding that delivers excellent value, low maintenance, and lasting curb appeal. Resistant to fading, cracking, and Michigan weather.',
+    icon: '🏡',
+  },
+  {
+    slug: 'fiber-cement-siding',
+    name: 'Fiber Cement Siding',
+    title: 'Fiber Cement Siding (James Hardie)',
+    description: 'James Hardie fiber cement siding — the gold standard for durability, fire resistance, and beauty. Engineered for Michigan\'s demanding climate.',
+    icon: '🧱',
+  },
+  {
+    slug: 'siding-repair',
+    name: 'Siding Repair',
+    title: 'Siding Repair & Replacement',
+    description: 'Cracked, warped, or storm-damaged siding? We repair and replace individual panels or sections to restore your home\'s protection and appearance.',
+    icon: '🔧',
+  },
+  {
+    slug: 'engineered-wood-siding',
+    name: 'Engineered Wood Siding',
+    title: 'Engineered Wood Siding (LP SmartSide)',
+    description: 'The natural beauty of real wood with modern engineered performance. LP SmartSide resists moisture, impacts, and termites — perfect for Michigan homes.',
+    icon: '🪵',
+  },
+];
+
 export const BRAND = {
   red: '#dd201f',
   redLight: '#f34140',

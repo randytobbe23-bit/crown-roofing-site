@@ -3,11 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { SITE, SERVICES, CITIES } from '@/lib/constants';
+import { SITE, SERVICES, CITIES, GUTTER_SERVICES, SIDING_SERVICES } from '@/lib/constants';
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [roofingOpen, setRoofingOpen] = useState(false);
+  const [guttersOpen, setGuttersOpen] = useState(false);
+  const [sidingOpen, setSidingOpen] = useState(false);
   const [areasOpen, setAreasOpen] = useState(false);
 
   return (
@@ -56,15 +58,50 @@ export function Header() {
               Home
             </Link>
 
-            {/* Services dropdown */}
+            {/* Roofing dropdown */}
             <div className="relative group">
               <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-crown-red rounded-md hover:bg-gray-50 transition-colors flex items-center gap-1">
-                Services <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                Roofing <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
               <div className="absolute top-full left-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
-                {SERVICES.map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-crown-red transition-colors first:rounded-t-lg last:rounded-b-lg">
-                    {s.icon} {s.title}
+                <Link href="/services/roofing" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-crown-red transition-colors rounded-t-lg">
+                  🏠 Roofing Services
+                </Link>
+                <Link href="/services/roof-replacement" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-crown-red transition-colors rounded-b-lg">
+                  🔨 Roof Replacement
+                </Link>
+              </div>
+            </div>
+
+            {/* Gutters dropdown */}
+            <div className="relative group">
+              <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-crown-red rounded-md hover:bg-gray-50 transition-colors flex items-center gap-1">
+                Gutters <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+                <Link href="/services/gutters" className="block px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:text-crown-red transition-colors rounded-t-lg border-b border-gray-100">
+                  🌧️ All Gutter Services
+                </Link>
+                {GUTTER_SERVICES.map((s, i) => (
+                  <Link key={s.slug} href={`/services/gutters/${s.slug}`} className={`block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-crown-red transition-colors ${i === GUTTER_SERVICES.length - 1 ? 'rounded-b-lg' : ''}`}>
+                    {s.icon} {s.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Siding dropdown */}
+            <div className="relative group">
+              <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-crown-red rounded-md hover:bg-gray-50 transition-colors flex items-center gap-1">
+                Siding <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+                <Link href="/services/siding" className="block px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:text-crown-red transition-colors rounded-t-lg border-b border-gray-100">
+                  🏗️ All Siding Services
+                </Link>
+                {SIDING_SERVICES.map((s, i) => (
+                  <Link key={s.slug} href={`/services/siding/${s.slug}`} className={`block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-crown-red transition-colors ${i === SIDING_SERVICES.length - 1 ? 'rounded-b-lg' : ''}`}>
+                    {s.icon} {s.name}
                   </Link>
                 ))}
               </div>
@@ -123,17 +160,51 @@ export function Header() {
                 Home
               </Link>
 
+              {/* Roofing */}
               <button
                 className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:text-crown-red rounded-md flex items-center justify-between"
-                onClick={() => setServicesOpen(!servicesOpen)}
+                onClick={() => setRoofingOpen(!roofingOpen)}
               >
-                Services <svg className={`w-3 h-3 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                Roofing <svg className={`w-3 h-3 transition-transform ${roofingOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
-              {servicesOpen && (
+              {roofingOpen && (
                 <div className="pl-4 space-y-1">
-                  {SERVICES.map((s) => (
-                    <Link key={s.slug} href={`/services/${s.slug}`} className="block px-3 py-2 text-sm text-gray-600 hover:text-crown-red" onClick={() => setOpen(false)}>
-                      {s.icon} {s.title}
+                  <Link href="/services/roofing" className="block px-3 py-2 text-sm text-gray-600 hover:text-crown-red" onClick={() => setOpen(false)}>🏠 Roofing Services</Link>
+                  <Link href="/services/roof-replacement" className="block px-3 py-2 text-sm text-gray-600 hover:text-crown-red" onClick={() => setOpen(false)}>🔨 Roof Replacement</Link>
+                </div>
+              )}
+
+              {/* Gutters */}
+              <button
+                className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:text-crown-red rounded-md flex items-center justify-between"
+                onClick={() => setGuttersOpen(!guttersOpen)}
+              >
+                Gutters <svg className={`w-3 h-3 transition-transform ${guttersOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              {guttersOpen && (
+                <div className="pl-4 space-y-1">
+                  <Link href="/services/gutters" className="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-crown-red" onClick={() => setOpen(false)}>🌧️ All Gutter Services</Link>
+                  {GUTTER_SERVICES.map((s) => (
+                    <Link key={s.slug} href={`/services/gutters/${s.slug}`} className="block px-3 py-2 text-sm text-gray-600 hover:text-crown-red" onClick={() => setOpen(false)}>
+                      {s.icon} {s.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* Siding */}
+              <button
+                className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:text-crown-red rounded-md flex items-center justify-between"
+                onClick={() => setSidingOpen(!sidingOpen)}
+              >
+                Siding <svg className={`w-3 h-3 transition-transform ${sidingOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              {sidingOpen && (
+                <div className="pl-4 space-y-1">
+                  <Link href="/services/siding" className="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-crown-red" onClick={() => setOpen(false)}>🏗️ All Siding Services</Link>
+                  {SIDING_SERVICES.map((s) => (
+                    <Link key={s.slug} href={`/services/siding/${s.slug}`} className="block px-3 py-2 text-sm text-gray-600 hover:text-crown-red" onClick={() => setOpen(false)}>
+                      {s.icon} {s.name}
                     </Link>
                   ))}
                 </div>
