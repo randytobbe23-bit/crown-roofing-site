@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-crown-red: #dd201f;
+  --color-crown-red-light: #f34140;
+  --color-crown-red-dark: #b81a19;
+  --color-crown-blue: #79c7ff;
+  --color-crown-blue-dark: #0792f0;
+  --color-crown-dark: #0a0a0a;
+  --color-crown-dark-alt: #171717;
+  --color-crown-surface: #141414;
+  --font-sans: var(--font-poppins);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
