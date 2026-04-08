@@ -15,6 +15,19 @@ export async function POST(req: NextRequest) {
     const [firstName, ...rest] = name.trim().split(' ');
     const lastName = rest.join(' ') || '';
 
+    // Build contact payload
+    const contactPayload: Record<string, unknown> = {
+      locationId: LOCATION_ID,
+      firstName,
+      lastName: lastName || undefined,
+      phone,
+      source: source || 'website',
+      tags: [service || 'general', 'website-lead'].filter(Boolean),
+    };
+
+    if (email) contactPayload.email = email;
+    if (address) contactPayload.address1 = address;
+
     // Create contact in GHL
     const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
       method: 'POST',
@@ -23,24 +36,14 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
         Version: '2021-07-28',
       },
-      body: JSON.stringify({
-        locationId: LOCATION_ID,
-        firstName,
-        lastName,
-        email: email || undefined,
-        phone,
-        address1: address || undefined,
-        source: source || 'website',
-        tags: [service || 'general', 'website-lead', source || 'homepage'].filter(Boolean),
-        customFields: message ? [{ key: 'message', value: message }] : undefined,
-      }),
+      body: JSON.stringify(contactPayload),
     });
 
     const contactData = await contactRes.json();
 
     if (!contactRes.ok) {
-      console.error('GHL contact creation failed:', contactData);
-      return NextResponse.json({ error: 'Failed to create contact' }, { status: 500 });
+      console.error('GHL contact creation failed:', JSON.stringify(contactData));
+      return NextResponse.json({ error: 'Failed to create contact', detail: contactData }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, contactId: contactData.contact?.id });
